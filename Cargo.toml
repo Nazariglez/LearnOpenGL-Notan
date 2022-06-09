@@ -1,0 +1,54 @@
+[package]
+name = "LearnOpenGL-Notan"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+notan = { path = "../nae" }
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+
+[[bin]]
+name = "1_1"
+path = "src/_1_getting_started/_1_1_hello_window.rs"
+
+[[bin]]
+name = "1_2"
+path = "src/_1_getting_started/_1_2_hello_window_clear.rs"
+
+[[bin]]
+name = "2_1"
+path = "src/_1_getting_started/_2_1_hello_triangle.rs"
+
+[[bin]]
+name = "2_2"
+path = "src/_1_getting_started/_2_2_hello_triangle_indexed.rs"
+
+[[bin]]
+name = "2_3"
+path = "src/_1_getting_started/_2_3_hello_triangle_exercise1.rs"
+
+[[bin]]
+name = "2_4"
+path = "src/_1_getting_started/_2_4_hello_triangle_exercise2.rs"
+
+[[bin]]
+name = "2_5"
+path = "src/_1_getting_started/_2_5_hello_triangle_exercise3.rs"
+
+[[bin]]
+name = "3_1"
+path = "src/_1_getting_started/_3_1_shaders_uniform.rs"
+
+[[bin]]
+name = "3_2"
+path = "src/_1_getting_started/_3_2_shaders_interpolation.rs"
