@@ -52,3 +52,39 @@ path = "src/_1_getting_started/_3_1_shaders_uniform.rs"
 [[bin]]
 name = "3_2"
 path = "src/_1_getting_started/_3_2_shaders_interpolation.rs"
+
+[[bin]]
+name = "3_4"
+path = "src/_1_getting_started/_3_4_shaders_exercise1.rs"
+
+[[bin]]
+name = "3_5"
+path = "src/_1_getting_started/_3_5_shaders_exercise2.rs"
+
+[[bin]]
+name = "3_6"
+path = "src/_1_getting_started/_3_6_shaders_exercise3.rs"
+
+[[bin]]
+name = "4_1"
+path = "src/_1_getting_started/_4_1_textures.rs"
+
+[[bin]]
+name = "4_2"
+path = "src/_1_getting_started/_4_2_textures_combined.rs"
+
+[[bin]]
+name = "4_3"
+path = "src/_1_getting_started/_4_3_textures_exercise1.rs"
+
+[[bin]]
+name = "4_4"
+path = "src/_1_getting_started/_4_4_textures_exercise2.rs"
+
+[[bin]]
+name = "4_5"
+path = "src/_1_getting_started/_4_5_textures_exercise3.rs"
+
+[[bin]]
+name = "4_6"
+path = "src/_1_getting_started/_4_6_textures_exercise4.rs"
