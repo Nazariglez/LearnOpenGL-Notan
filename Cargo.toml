@@ -1,5 +1,5 @@
 [package]
-name = "LearnOpenGL-Notan"
+name = "learn_open_gl_notan"
 version = "0.1.0"
 edition = "2021"
 
@@ -88,3 +88,15 @@ path = "src/_1_getting_started/_4_5_textures_exercise3.rs"
 [[bin]]
 name = "4_6"
 path = "src/_1_getting_started/_4_6_textures_exercise4.rs"
+
+[[bin]]
+name = "5_1"
+path = "src/_1_getting_started/_5_1_transformations.rs"
+
+[[bin]]
+name = "5_2"
+path = "src/_1_getting_started/_5_2_transformations_exercise1.rs"
+
+[[bin]]
+name = "5_3"
+path = "src/_1_getting_started/_5_3_transformations_exercise2.rs"
