@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 notan = { path = "../nae" }
+bytemuck = "1.9.1"
 
 [profile.dev]
 opt-level = 1
@@ -100,3 +101,19 @@ path = "src/_1_getting_started/_5_2_transformations_exercise1.rs"
 [[bin]]
 name = "5_3"
 path = "src/_1_getting_started/_5_3_transformations_exercise2.rs"
+
+[[bin]]
+name = "6_1"
+path = "src/_1_getting_started/_6_1_coordinate_systems.rs"
+
+[[bin]]
+name = "6_2"
+path = "src/_1_getting_started/_6_2_coordinate_systems_depth.rs"
+
+[[bin]]
+name = "6_3"
+path = "src/_1_getting_started/_6_3_coordinate_systems_multiple.rs"
+
+[[bin]]
+name = "6_4"
+path = "src/_1_getting_started/_6_4_coordinate_systems_exercise3.rs"
