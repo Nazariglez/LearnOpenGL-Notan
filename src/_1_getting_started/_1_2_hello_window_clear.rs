@@ -1,5 +1,6 @@
 use notan::prelude::*;
 
+#[notan_main]
 fn main() -> Result<(), String> {
     notan::init()
         // pass the update function

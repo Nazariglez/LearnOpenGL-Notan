@@ -48,6 +48,7 @@ struct State {
     texture: Texture,
 }
 
+#[notan_main]
 fn main() -> Result<(), String> {
     // init notan using setup as initialization callback
     notan::init_with(setup)

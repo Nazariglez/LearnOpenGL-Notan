@@ -84,6 +84,7 @@ struct State {
     cube_positions: [Vec3; 10],
 }
 
+#[notan_main]
 fn main() -> Result<(), String> {
     // init notan using setup as initialization callback
     notan::init_with(setup)

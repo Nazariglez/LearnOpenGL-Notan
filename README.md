@@ -158,10 +158,10 @@ Draw multiple cubes
 * [Demo](https://TODO)
 * [Source](./src/_1_getting_started/_6_3_coordinate_systems_multiple.rs)
 * [Tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems)
-* 
+ 
 ### 6.4 Coordinate systems exercises 3
 Rotate every 3rd container over time
 * [Demo](https://TODO)
 * [Source](./src/_1_getting_started/_6_4_coordinate_systems_exercise3.rs)
 * [Tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems)
-* 
+ 

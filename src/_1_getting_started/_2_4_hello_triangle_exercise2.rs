@@ -30,6 +30,7 @@ struct State {
     vbo2: Buffer,
 }
 
+#[notan_main]
 fn main() -> Result<(), String> {
     // init notan using setup as initialization callback
     notan::init_with(setup)

@@ -3,11 +3,10 @@ name = "learn_open_gl_notan"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 notan = { path = "../nae" }
 bytemuck = "1.9.1"
+learn_open_gl_notan = { path = "." }
 
 [profile.dev]
 opt-level = 1
