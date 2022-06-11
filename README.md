@@ -122,3 +122,46 @@ Use the keyboard arrows Up and Down to change the value
 * [Demo](https://TODO)
 * [Source](./src/_1_getting_started/_4_6_textures_exercise4.rs)
 * [Tutorial](https://learnopengl.com/Getting-started/Textures)
+
+### 5.1 Transformations
+Translate and rotate the container
+* [Demo](https://TODO)
+* [Source](./src/_1_getting_started/_5_1_transformations.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Transformations)
+
+### 5.2 Transformations exercise 1
+Change the rotation point of the container
+* [Demo](https://TODO)
+* [Source](./src/_1_getting_started/_5_2_transformations_exercise1.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Transformations)
+
+### 5.3 Transformations exercise 2
+Add a new continer and translate and scale it, while keep translating and rotating the first one.
+* [Demo](https://TODO)
+* [Source](./src/_1_getting_started/_5_3_transformations_exercise2.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Transformations)
+
+### 6.1 Coordinate systems
+Add a matrix projection to alter how the contains is displayed 
+* [Demo](https://TODO)
+* [Source](./src/_1_getting_started/_6_1_coordinate_systems.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems)
+
+### 6.2 Coordinate systems depth
+Transform our container in a Cube (3d)
+* [Demo](https://TODO)
+* [Source](./src/_1_getting_started/_6_2_coordinate_systems_depth.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems)
+
+### 6.3 Coordinate systems multiple
+Draw multiple cubes
+* [Demo](https://TODO)
+* [Source](./src/_1_getting_started/_6_3_coordinate_systems_multiple.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems)
+* 
+### 6.4 Coordinate systems exercises 3
+Rotate every 3rd container over time
+* [Demo](https://TODO)
+* [Source](./src/_1_getting_started/_6_4_coordinate_systems_exercise3.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems)
+* 
