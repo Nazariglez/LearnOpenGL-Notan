@@ -1,4 +1,4 @@
-use notan::math::{vec3, Mat4, DEG_TO_RAD};
+use notan::math::{vec3, Mat4};
 use notan::prelude::*;
 
 // language=glsl

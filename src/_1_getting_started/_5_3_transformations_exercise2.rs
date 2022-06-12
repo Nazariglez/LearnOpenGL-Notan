@@ -67,7 +67,7 @@ fn main() -> Result<(), String> {
 // create transformation for container1
 fn create_transform_rotation(time: f32) -> Mat4 {
     let mut transform = Mat4::IDENTITY; // make sure to initialize matrix to identity matrix first
-    transform = transform * Mat4::from_translation(vec3(0.5, -0.5, 0.0));
+    transform *= Mat4::from_translation(vec3(0.5, -0.5, 0.0));
     transform * Mat4::from_rotation_z(time)
 }
 
@@ -75,7 +75,7 @@ fn create_transform_rotation(time: f32) -> Mat4 {
 fn create_transform_scale(time: f32) -> Mat4 {
     let scale_amount = time.sin();
     let mut transform = Mat4::IDENTITY; // make sure to initialize matrix to identity matrix first
-    transform = transform * Mat4::from_translation(vec3(-0.5, 0.5, 0.0));
+    transform *= Mat4::from_translation(vec3(-0.5, 0.5, 0.0));
     transform * Mat4::from_scale(vec3(scale_amount, scale_amount, scale_amount))
 }
 

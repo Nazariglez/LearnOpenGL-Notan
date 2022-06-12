@@ -1,4 +1,4 @@
-use notan::math::{vec3, Mat4, Vec3, DEG_TO_RAD};
+use notan::math::{vec3, Mat4, Vec3};
 use notan::prelude::*;
 use std::ops::Rem;
 
@@ -61,7 +61,7 @@ fn create_transform(aspect_ratio: f32, translation: Vec3, angle: f32) -> Transfo
         model: Mat4::IDENTITY * translate * rotate,
         view: Mat4::IDENTITY * Mat4::from_translation(vec3(0.0, 0.0, -3.0)),
         projection: Mat4::IDENTITY
-            * Mat4::perspective_rh_gl(45.0 * DEG_TO_RAD, aspect_ratio, 0.1, 100.0),
+            * Mat4::perspective_rh_gl(45.0_f32.to_radians(), aspect_ratio, 0.1, 100.0),
     }
 }
 

@@ -69,7 +69,7 @@ fn create_transform(time: f32) -> Mat4 {
     let mut transform = Mat4::IDENTITY; // make sure to initialize matrix to identity matrix first
 
     // switched the order
-    transform = transform * Mat4::from_rotation_z(time);
+    transform *= Mat4::from_rotation_z(time);
     transform * Mat4::from_translation(vec3(0.5, -0.5, 0.0))
 }
 

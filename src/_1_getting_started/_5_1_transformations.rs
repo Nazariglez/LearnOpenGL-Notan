@@ -67,7 +67,7 @@ fn main() -> Result<(), String> {
 // create transformation
 fn create_transform(time: f32) -> Mat4 {
     let mut transform = Mat4::IDENTITY; // make sure to initialize matrix to identity matrix first
-    transform = transform * Mat4::from_translation(vec3(0.5, -0.5, 0.0));
+    transform *= Mat4::from_translation(vec3(0.5, -0.5, 0.0));
     transform * Mat4::from_rotation_z(time)
 }
 
