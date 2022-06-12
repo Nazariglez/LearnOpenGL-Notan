@@ -119,3 +119,11 @@ path = "src/_1_getting_started/_6_4_coordinate_systems_exercise3.rs"
 [[bin]]
 name = "1_7_1"
 path = "src/_1_getting_started/_7_1_camera_circle.rs"
+
+[[bin]]
+name = "1_7_2"
+path = "src/_1_getting_started/_7_2_camera_keyboard_dt.rs"
+
+[[bin]]
+name = "1_7_3"
+path = "src/_1_getting_started/_7_3_camera_mouse_zoom.rs"
