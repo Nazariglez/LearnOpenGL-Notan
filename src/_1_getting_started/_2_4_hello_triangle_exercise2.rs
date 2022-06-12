@@ -100,7 +100,6 @@ fn update(app: &mut App) {
 }
 
 fn draw(gfx: &mut Graphics, state: &mut State) {
-    println!("------being");
     // create a renderer object
     let mut renderer = gfx.create_renderer();
 
@@ -123,6 +122,4 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
 
     // render to the screen
     gfx.render(&renderer);
-
-    println!("------end");
 }

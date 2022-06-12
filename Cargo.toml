@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 notan = { path = "../nae" }
 bytemuck = "1.9.1"
-learn_open_gl_notan = { path = "." }
 
 [profile.dev]
 opt-level = 1
