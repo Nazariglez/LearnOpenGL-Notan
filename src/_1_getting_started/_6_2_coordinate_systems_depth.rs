@@ -54,10 +54,10 @@ struct Transform {
 // create transformation
 fn create_transform(time: f32, aspect_ratio: f32) -> Transform {
     Transform {
-        model: Mat4::IDENTITY * Mat4::from_rotation_x(time) * 0.5 * Mat4::from_rotation_y(time),
+        model: Mat4::IDENTITY * Mat4::from_axis_angle(vec3(0.5, 1.0, 1.0).normalize(), time),
         view: Mat4::IDENTITY * Mat4::from_translation(vec3(0.0, 0.0, -3.0)),
         projection: Mat4::IDENTITY
-            * Mat4::perspective_rh_gl(45.0 * DEG_TO_RAD, aspect_ratio, 0.1, 100.0),
+            * Mat4::perspective_rh_gl(45.0_f32.to_radians(), aspect_ratio, 0.1, 100.0),
     }
 }
 

@@ -130,10 +130,10 @@ fn setup(gfx: &mut Graphics) -> State {
     let aspect_ratio = width / height;
 
     let transform = Transform {
-        model: Mat4::IDENTITY * Mat4::from_rotation_x(-55.0 * DEG_TO_RAD),
+        model: Mat4::IDENTITY * Mat4::from_rotation_x(-55.0_f32.to_radians()),
         view: Mat4::IDENTITY * Mat4::from_translation(vec3(0.0, 0.0, -3.0)),
         projection: Mat4::IDENTITY
-            * Mat4::perspective_rh_gl(45.0 * DEG_TO_RAD, aspect_ratio, 0.1, 100.0),
+            * Mat4::perspective_rh_gl(45.0_f32.to_radians(), aspect_ratio, 0.1, 100.0),
     };
 
     // create the uniform buffer object

@@ -55,12 +55,7 @@ struct Transform {
 // create transformation
 fn create_transform(aspect_ratio: f32, translation: Vec3, angle: f32) -> Transform {
     let translate = Mat4::from_translation(translation);
-
-    let rotate = Mat4::from_rotation_x(angle * DEG_TO_RAD)
-        * Mat4::from_rotation_y(angle * DEG_TO_RAD)
-        * 0.3
-        * Mat4::from_rotation_z(angle * DEG_TO_RAD)
-        * 0.5;
+    let rotate = Mat4::from_axis_angle(vec3(1.0, 0.3, 0.5).normalize(), angle.to_radians());
 
     Transform {
         model: Mat4::IDENTITY * translate * rotate,
