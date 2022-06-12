@@ -17,101 +17,101 @@ opt-level = 3
 lto = "thin"
 
 [[bin]]
-name = "1_1"
+name = "1_1_1"
 path = "src/_1_getting_started/_1_1_hello_window.rs"
 
 [[bin]]
-name = "1_2"
+name = "1_1_2"
 path = "src/_1_getting_started/_1_2_hello_window_clear.rs"
 
 [[bin]]
-name = "2_1"
+name = "1_2_1"
 path = "src/_1_getting_started/_2_1_hello_triangle.rs"
 
 [[bin]]
-name = "2_2"
+name = "1_2_2"
 path = "src/_1_getting_started/_2_2_hello_triangle_indexed.rs"
 
 [[bin]]
-name = "2_3"
+name = "1_2_3"
 path = "src/_1_getting_started/_2_3_hello_triangle_exercise1.rs"
 
 [[bin]]
-name = "2_4"
+name = "1_2_4"
 path = "src/_1_getting_started/_2_4_hello_triangle_exercise2.rs"
 
 [[bin]]
-name = "2_5"
+name = "1_2_5"
 path = "src/_1_getting_started/_2_5_hello_triangle_exercise3.rs"
 
 [[bin]]
-name = "3_1"
+name = "1_3_1"
 path = "src/_1_getting_started/_3_1_shaders_uniform.rs"
 
 [[bin]]
-name = "3_2"
+name = "1_3_2"
 path = "src/_1_getting_started/_3_2_shaders_interpolation.rs"
 
 [[bin]]
-name = "3_4"
+name = "1_3_4"
 path = "src/_1_getting_started/_3_4_shaders_exercise1.rs"
 
 [[bin]]
-name = "3_5"
+name = "1_3_5"
 path = "src/_1_getting_started/_3_5_shaders_exercise2.rs"
 
 [[bin]]
-name = "3_6"
+name = "1_3_6"
 path = "src/_1_getting_started/_3_6_shaders_exercise3.rs"
 
 [[bin]]
-name = "4_1"
+name = "1_4_1"
 path = "src/_1_getting_started/_4_1_textures.rs"
 
 [[bin]]
-name = "4_2"
+name = "1_4_2"
 path = "src/_1_getting_started/_4_2_textures_combined.rs"
 
 [[bin]]
-name = "4_3"
+name = "1_4_3"
 path = "src/_1_getting_started/_4_3_textures_exercise1.rs"
 
 [[bin]]
-name = "4_4"
+name = "1_4_4"
 path = "src/_1_getting_started/_4_4_textures_exercise2.rs"
 
 [[bin]]
-name = "4_5"
+name = "1_4_5"
 path = "src/_1_getting_started/_4_5_textures_exercise3.rs"
 
 [[bin]]
-name = "4_6"
+name = "1_4_6"
 path = "src/_1_getting_started/_4_6_textures_exercise4.rs"
 
 [[bin]]
-name = "5_1"
+name = "1_5_1"
 path = "src/_1_getting_started/_5_1_transformations.rs"
 
 [[bin]]
-name = "5_2"
+name = "1_5_2"
 path = "src/_1_getting_started/_5_2_transformations_exercise1.rs"
 
 [[bin]]
-name = "5_3"
+name = "1_5_3"
 path = "src/_1_getting_started/_5_3_transformations_exercise2.rs"
 
 [[bin]]
-name = "6_1"
+name = "1_6_1"
 path = "src/_1_getting_started/_6_1_coordinate_systems.rs"
 
 [[bin]]
-name = "6_2"
+name = "1_6_2"
 path = "src/_1_getting_started/_6_2_coordinate_systems_depth.rs"
 
 [[bin]]
-name = "6_3"
+name = "1_6_3"
 path = "src/_1_getting_started/_6_3_coordinate_systems_multiple.rs"
 
 [[bin]]
-name = "6_4"
+name = "1_6_4"
 path = "src/_1_getting_started/_6_4_coordinate_systems_exercise3.rs"
