@@ -1,3 +1,4 @@
 /target
 .idea
 docs/*.ts
+screenshots/*.source.png
