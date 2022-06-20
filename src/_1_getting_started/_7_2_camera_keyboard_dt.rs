@@ -1,6 +1,5 @@
 use notan::math::{vec3, Mat4, Vec3};
 use notan::prelude::*;
-use std::ops::Rem;
 
 // language=glsl
 const VERTEX_SHADER_SOURCE: ShaderSource = notan::vertex_shader! {
@@ -241,13 +240,11 @@ fn update(app: &mut App, state: &mut State) {
     }
 }
 
-fn draw(app: &mut App, gfx: &mut Graphics, state: &mut State) {
+fn draw(gfx: &mut Graphics, state: &mut State) {
     // create transformation
     let size = gfx.size();
     let (width, height) = (size.0 as f32, size.1 as f32);
     let aspect_ratio = width / height;
-
-    let time = app.timer.time_since_init();
 
     state
         .cube_positions

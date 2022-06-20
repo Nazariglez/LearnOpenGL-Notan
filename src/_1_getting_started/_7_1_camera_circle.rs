@@ -1,6 +1,5 @@
 use notan::math::{vec3, Mat4, Vec3};
 use notan::prelude::*;
-use std::ops::Rem;
 
 // language=glsl
 const VERTEX_SHADER_SOURCE: ShaderSource = notan::vertex_shader! {

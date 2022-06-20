@@ -1,6 +1,7 @@
 use notan::math::{vec3, Mat4, Vec3};
 use notan::prelude::*;
-use std::ops::Rem;
+
+const IS_WASM: bool = cfg!(target_arch = "wasm32");
 
 // language=glsl
 const VERTEX_SHADER_SOURCE: ShaderSource = notan::vertex_shader! {
@@ -107,8 +108,8 @@ fn main() -> Result<(), String> {
 
 // initialize the state and return it to be used by notan
 fn setup(app: &mut App, gfx: &mut Graphics) -> State {
-    // grab the cursor
-    app.window().set_grab_cursor(true);
+    // capture the cursor
+    app.window().set_capture_cursor(true);
 
     // Declare the vertex attributes
     let vertex_info = VertexInfo::new()
@@ -245,9 +246,16 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
 }
 
 fn update(app: &mut App, state: &mut State) {
-    // if esc is pressed close the app
-    if app.keyboard.was_pressed(KeyCode::Escape) {
-        app.exit();
+    if !IS_WASM {
+        // if esc is pressed close the app
+        if app.keyboard.was_pressed(KeyCode::Escape) {
+            app.exit();
+        }
+    }
+
+    // capture the cursor (wasm32 allow escape the cursor using ESC)
+    if app.mouse.was_pressed(MouseButton::Left) && !app.window().capture_cursor() {
+        app.window().set_capture_cursor(true);
     }
 
     // Process all inputs to move the camera
@@ -295,15 +303,19 @@ fn update(app: &mut App, state: &mut State) {
     );
 
     state.camera_front = front.normalize();
+
+    let delta_y = app.mouse.wheel_delta.y;
+    if delta_y != 0.0 {
+        state.fov -= delta_y * app.timer.delta_f32();
+        state.fov = state.fov.clamp(1.0, 45.0);
+    }
 }
 
-fn draw(app: &mut App, gfx: &mut Graphics, state: &mut State) {
+fn draw(gfx: &mut Graphics, state: &mut State) {
     // create transformation
     let size = gfx.size();
     let (width, height) = (size.0 as f32, size.1 as f32);
     let aspect_ratio = width / height;
-
-    let time = app.timer.time_since_init();
 
     state
         .cube_positions

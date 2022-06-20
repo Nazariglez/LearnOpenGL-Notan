@@ -239,4 +239,32 @@ Rotate every 3rd container over time
 * [Demo](https://nazariglez.github.io/LearnOpenGL-Notan/1_6_4.html)
 * [Source](./src/_1_getting_started/_6_4_coordinate_systems_exercise3.rs)
 * [Tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems)
- 
+
+### 7.1 Camera circle
+Set up a 3d camera that rotates around the containers
+
+<img src="./screenshots/1_7_1.png" width="200px">
+
+* [Demo](https://nazariglez.github.io/LearnOpenGL-Notan/1_7_1.html)
+* [Source](./src/_1_getting_started/_7_1_camera_circle.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Camera)
+
+### 7.2 Camera keyboard delta
+Control the camera using the keys W A S D
+
+<img src="./screenshots/1_7_2.png" width="200px">
+
+* [Demo](https://nazariglez.github.io/LearnOpenGL-Notan/1_7_2.html)
+* [Source](./src/_1_getting_started/_7_2_camera_keyboard_dt.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Camera)
+
+### 7.3 Camera keyboard delta
+Use the keyboard to move the camera and the mouse to control the movement, 
+scroll with the wheel to zoom in or zoom out.
+Click on the window to capture the cursor.
+
+<img src="./screenshots/1_7_3.png" width="200px">
+
+* [Demo](https://nazariglez.github.io/LearnOpenGL-Notan/1_7_3.html)
+* [Source](./src/_1_getting_started/_7_3_camera_mouse_zoom.rs)
+* [Tutorial](https://learnopengl.com/Getting-started/Camera)
