@@ -177,13 +177,10 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
         .unwrap();
 
     // create the uniform buffer object
-    let transform_ubo = gfx
-        .create_uniform_buffer(0, "Transform")
-        .build()
-        .unwrap();
+    let transform_ubo = gfx.create_uniform_buffer(0, "Transform").build().unwrap();
 
-    let object_color:[f32; 3] = [1.0, 0.5, 0.31];
-    let light_color:[f32; 3] = [1.0, 1.0, 1.0];
+    let object_color: [f32; 3] = [1.0, 0.5, 0.31];
+    let light_color: [f32; 3] = [1.0, 1.0, 1.0];
 
     let light_ubo = gfx
         .create_uniform_buffer(1, "Light")
@@ -191,7 +188,10 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
         .build()
         .unwrap();
 
-    let camera = Camera::new(vec3(0.0, 0.0, 3.0));
+    let camera = Camera {
+        position: vec3(0.0, 0.0, 3.0),
+        ..Default::default()
+    };
 
     State {
         pipeline_1,
@@ -202,7 +202,7 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
         camera,
         last_x: 0.0,
         last_y: 0.0,
-        first_mouse: true
+        first_mouse: true,
     }
 }
 
@@ -222,10 +222,14 @@ fn update(app: &mut App, state: &mut State) {
     // Process all inputs to move the camera
     let delta = app.timer.delta_f32();
     if app.keyboard.is_down(KeyCode::W) {
-        state.camera.process_keyboard(CameraMovement::Forward, delta);
+        state
+            .camera
+            .process_keyboard(CameraMovement::Forward, delta);
     }
     if app.keyboard.is_down(KeyCode::S) {
-        state.camera.process_keyboard(CameraMovement::Backward, delta);
+        state
+            .camera
+            .process_keyboard(CameraMovement::Backward, delta);
     }
     if app.keyboard.is_down(KeyCode::A) {
         state.camera.process_keyboard(CameraMovement::Left, delta);
@@ -249,10 +253,12 @@ fn update(app: &mut App, state: &mut State) {
     state.last_x = x;
     state.last_y = y;
 
-    // state.camera.process_mouse_movement(xoffset, yoffset, false);
+    state.camera.process_mouse_movement(xoffset, yoffset, false);
 
     // process zoom
-    // state.camera.process_mouse_scroll(app.mouse.wheel_delta.y);
+    state
+        .camera
+        .process_mouse_scroll(app.mouse.wheel_delta.y * delta);
 }
 
 fn draw(app: &mut App, gfx: &mut Graphics, state: &mut State) {
@@ -263,21 +269,15 @@ fn draw(app: &mut App, gfx: &mut Graphics, state: &mut State) {
     let projection = Mat4::IDENTITY
         * Mat4::perspective_rh_gl(state.camera.zoom.to_radians(), aspect_ratio, 0.1, 100.0);
     let view = state.camera.get_view_matrix();
-    println!("{:?}", state.camera.front);
 
     // world transformation
     let model = Mat4::IDENTITY;
-    //
-    // let transform = &[Transform {
-    //     projection,
-    //     view: Mat4::IDENTITY,
-    //     model: Mat4::IDENTITY,
-    // }];
+
     // lighting transform
     let transform = &[Transform {
         model,
         view,
-        projection
+        projection,
     }];
     let data: &[f32] = bytemuck::cast_slice(transform);
     gfx.set_buffer_data(&state.transform_ubo, data);
@@ -295,12 +295,31 @@ fn draw(app: &mut App, gfx: &mut Graphics, state: &mut State) {
     renderer.set_pipeline(&state.pipeline_1);
     renderer.bind_buffers(&[&state.vbo, &state.transform_ubo, &state.light_ubo]);
     renderer.draw(0, 36);
-    //
-    // renderer.set_pipeline(&state.pipeline_2);
-    // renderer.bind_buffers(&[&state.vbo, &state.transform_ubo]);
-    // renderer.draw(0, 36);
+
     renderer.end();
 
-    // render to the screen
+    gfx.render(&renderer);
+
+    // --
+
+    let mut renderer = gfx.create_renderer();
+    // lighting
+    let lightPos = vec3(1.2, 1.0, 2.0);
+    let model = Mat4::from_translation(lightPos);
+    let model = model * Mat4::from_scale(Vec3::splat(0.2));
+    let transform = &[Transform {
+        model,
+        view,
+        projection,
+    }];
+    let data: &[f32] = bytemuck::cast_slice(transform);
+    gfx.set_buffer_data(&state.transform_ubo, data);
+
+    renderer.begin(None);
+    renderer.set_pipeline(&state.pipeline_2);
+    renderer.bind_buffers(&[&state.vbo, &state.transform_ubo]);
+    renderer.draw(0, 36);
+    renderer.end();
+
     gfx.render(&renderer);
 }

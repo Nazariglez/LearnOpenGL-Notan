@@ -1,3 +1,4 @@
+use notan::app::assets::LoaderCallback::P;
 use notan::math::{vec3, Mat4, Vec3};
 
 const YAW: f32 = -90.0;
@@ -14,26 +15,29 @@ pub enum CameraMovement {
 }
 
 pub struct Camera {
+    // Camera attrs
     pub position: Vec3,
     pub front: Vec3,
-    up: Vec3,
-    right: Vec3,
-    world_up: Vec3,
-    yaw: f32,
-    pitch: f32,
-    movement_speed: f32,
-    mouse_sensitivity: f32,
+    pub up: Vec3,
+    pub right: Vec3,
+    pub world_up: Vec3,
+    // euler angles
+    pub yaw: f32,
+    pub pitch: f32,
+    // options
+    pub movement_speed: f32,
+    pub mouse_sensitivity: f32,
     pub zoom: f32,
 }
 
-impl Camera {
-    pub fn new(position: Vec3) -> Self {
+impl Default for Camera {
+    fn default() -> Self {
         let mut camera = Self {
-            position,
+            position: Vec3::ZERO,
             front: vec3(0.0, 0.0, -1.0),
-            up: vec3(0.0, 1.0, 0.0),
-            right: Default::default(),
-            world_up: Default::default(),
+            up: Vec3::ZERO,
+            right: Vec3::ZERO,
+            world_up: Vec3::Y,
             yaw: YAW,
             pitch: PITCH,
             movement_speed: SPEED,
@@ -43,7 +47,9 @@ impl Camera {
         update_camera_vectors(&mut camera);
         camera
     }
+}
 
+impl Camera {
     pub fn get_view_matrix(&self) -> Mat4 {
         Mat4::look_at_rh(self.position, self.position + self.front, self.up)
     }
@@ -83,8 +89,6 @@ fn update_camera_vectors(camera: &mut Camera) {
         camera.pitch.to_radians().sin(),
         camera.yaw.to_radians().sin() * camera.pitch.to_radians().cos(),
     );
-
-    println!(": yaw:{} pitch:{}", camera.yaw.to_radians().cos(), camera.pitch.to_radians().cos());
 
     camera.front = front.normalize();
     camera.right = camera.front.cross(camera.world_up).normalize();
