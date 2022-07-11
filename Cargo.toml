@@ -135,3 +135,11 @@ path = "src/_2_lighting/_1_1_colors.rs"
 [[bin]]
 name = "2_2_1"
 path = "src/_2_lighting/_2_1_basic_lighting_diffuse.rs"
+
+[[bin]]
+name = "2_2_2"
+path = "src/_2_lighting/_2_2_basic_lighting_specular.rs"
+
+[[bin]]
+name = "2_2_3"
+path = "src/_2_lighting/_2_3_basic_lighting_exercise1.rs"
