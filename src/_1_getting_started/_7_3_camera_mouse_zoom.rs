@@ -45,8 +45,8 @@ const FRAGMENT_SHADER_SOURCE: ShaderSource = notan::fragment_shader! {
 };
 
 // Represent our transform data
+#[uniform]
 #[derive(Copy, Clone)]
-#[repr(C)]
 struct Transform {
     model: Mat4,
     view: Mat4,
@@ -71,9 +71,6 @@ fn create_transform(
             * Mat4::perspective_rh_gl(fov.to_radians(), aspect_ratio, 0.1, 100.0),
     }
 }
-
-unsafe impl bytemuck::Zeroable for Transform {}
-unsafe impl bytemuck::Pod for Transform {}
 
 // Create a struct to store the app's state
 #[derive(AppState)]
@@ -328,17 +325,10 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
                 state.camera_up,
             );
             let angle = i as f32 * 20.0;
-            let transform = &[create_transform(
-                state.fov,
-                view,
-                aspect_ratio,
-                translation,
-                angle,
-            )];
 
             // update uniform buffer object
-            let data: &[f32] = bytemuck::cast_slice(transform);
-            gfx.set_buffer_data(&state.ubo, data);
+            let transform = create_transform(state.fov, view, aspect_ratio, translation, angle);
+            gfx.set_buffer_data(&state.ubo, &transform);
 
             let mut renderer = gfx.create_renderer();
 

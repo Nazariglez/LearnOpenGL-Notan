@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-notan = "0.5.0"
+notan = { version = "0.6.0", path = "../nae", default-features = false, features = ["backend", "log"] }
 bytemuck = "1.9.1"
 
 [profile.dev]
@@ -131,3 +131,7 @@ path = "src/_1_getting_started/_7_3_camera_mouse_zoom.rs"
 [[bin]]
 name = "2_1_1"
 path = "src/_2_lighting/_1_1_colors.rs"
+
+[[bin]]
+name = "2_2_1"
+path = "src/_2_lighting/_2_1_basic_lighting_diffuse.rs"

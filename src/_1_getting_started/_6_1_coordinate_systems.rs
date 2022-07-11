@@ -43,16 +43,13 @@ const FRAGMENT_SHADER_SOURCE: ShaderSource = notan::fragment_shader! {
 };
 
 // Represent our transform data
+#[uniform]
 #[derive(Copy, Clone)]
-#[repr(C)]
 struct Transform {
     model: Mat4,
     view: Mat4,
     projection: Mat4,
 }
-
-unsafe impl bytemuck::Zeroable for Transform {}
-unsafe impl bytemuck::Pod for Transform {}
 
 // Create a struct to store the app's state
 #[derive(AppState)]
@@ -139,7 +136,7 @@ fn setup(gfx: &mut Graphics) -> State {
     // create the uniform buffer object
     let ubo = gfx
         .create_uniform_buffer(0, "Transform")
-        .with_data(bytemuck::cast_slice(&[transform]))
+        .with_data(&transform)
         .build()
         .unwrap();
 

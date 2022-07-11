@@ -124,7 +124,7 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
     // create the uniform buffer object
     let ubo = gfx
         .create_uniform_buffer(0, "Locals")
-        .with_data(&transform.to_cols_array())
+        .with_data(&transform)
         .build()
         .unwrap();
 
@@ -162,7 +162,7 @@ fn update(app: &mut App) {
 fn draw(app: &mut App, gfx: &mut Graphics, state: &mut State) {
     // update the uniform block data
     let transform = create_transform(app.timer.time_since_init());
-    gfx.set_buffer_data(&state.ubo, &transform.to_cols_array());
+    gfx.set_buffer_data(&state.ubo, &transform);
 
     let mut renderer = gfx.create_renderer();
 

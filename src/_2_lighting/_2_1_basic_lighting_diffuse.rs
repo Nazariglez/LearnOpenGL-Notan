@@ -5,7 +5,66 @@ use notan::prelude::*;
 const IS_WASM: bool = cfg!(target_arch = "wasm32");
 
 // language=glsl
-const COLOR_VERTEX_SHADER: ShaderSource = notan::vertex_shader! {
+const BASIC_LIGHTING_VERTEX_SHADER: ShaderSource = notan::vertex_shader! {
+  r#"
+    #version 450
+    layout (location = 0) in vec3 aPos;
+    layout (location = 1) in vec3 aNormal;
+
+    layout (location = 0) out vec3 FragPos;
+    layout (location = 1) out vec3 Normal;
+
+    layout(set = 0, binding = 0) uniform Transform {
+        mat4 model;
+        mat4 view;
+        mat4 projection;
+    };
+
+    void main()
+    {
+        FragPos = vec3(model * vec4(aPos, 1.0));
+        Normal = aNormal;
+
+        gl_Position = projection * view * vec4(FragPos, 1.0);
+    }
+  "#
+};
+
+// language=glsl
+const BASIC_LIGHTING_FRAGMENT_SHADER: ShaderSource = notan::fragment_shader! {
+  r#"
+    #version 450
+    layout(location = 0) in vec3 Normal;
+    layout(location = 1) in vec3 FragPos;
+
+    layout(location = 0) out vec4 color;
+
+    layout(set = 0, binding = 1) uniform Light {
+        vec3 lightPos;
+        vec3 lightColor;
+        vec3 objectColor;
+    };
+
+    void main()
+    {
+        // ambient
+        float ambientStrength = 0.1;
+        vec3 ambient = ambientStrength * lightColor;
+
+        // diffuse
+        vec3 norm = normalize(Normal);
+        vec3 lightDir = normalize(lightPos - FragPos);
+        float diff = max(dot(norm, lightDir), 0.0);
+        vec3 diffuse = diff * lightColor;
+
+        vec3 result = (ambient + diffuse) * objectColor;
+        color = vec4(result, 1.0);
+    }
+  "#
+};
+
+// language=glsl
+const LIGHT_CUBE_VERTEX_SHADER: ShaderSource = notan::vertex_shader! {
   r#"
     #version 450
     layout (location = 0) in vec3 aPos;
@@ -24,24 +83,6 @@ const COLOR_VERTEX_SHADER: ShaderSource = notan::vertex_shader! {
 };
 
 // language=glsl
-const COLOR_FRAGMENT_SHADER: ShaderSource = notan::fragment_shader! {
-  r#"
-    #version 450
-    layout(location = 0) out vec4 color;
-
-    layout(set = 0, binding = 1) uniform Light {
-        vec3 objectColor;
-        vec3 lightColor;
-    };
-
-    void main()
-    {
-        color = vec4(lightColor * objectColor, 1.0);
-    }
-  "#
-};
-
-// language=glsl
 const LIGHT_CUBE_FRAGMENT_SHADER: ShaderSource = notan::fragment_shader! {
     r#"
         #version 450
@@ -54,27 +95,27 @@ const LIGHT_CUBE_FRAGMENT_SHADER: ShaderSource = notan::fragment_shader! {
 };
 
 // Represent our transform data
-#[uniform]
 #[derive(Copy, Clone, Default)]
+#[uniform]
 struct Transform {
     model: Mat4,
     view: Mat4,
     projection: Mat4,
 }
 
-// Represent our light data
-#[uniform]
 #[derive(Copy, Clone, Default)]
+#[uniform]
 struct Light {
-    object_color: Vec3,
+    light_pos: Vec3,
     light_color: Vec3,
+    object_color: Vec3,
 }
 
 // Create a struct to store the app's state
 #[derive(AppState)]
 struct State {
-    pipeline_1: Pipeline,
-    pipeline_2: Pipeline,
+    basic_lighting_pipeline: Pipeline,
+    light_cube_pipeline: Pipeline,
     vbo: Buffer,
     transform_ubo: Buffer,
     light_ubo: Buffer,
@@ -101,7 +142,9 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
     app.window().set_capture_cursor(true);
 
     // Declare the vertex attributes
-    let vertex_info = VertexInfo::new().attr(0, VertexFormat::Float32x3); // positions
+    let vertex_info = VertexInfo::new()
+        .attr(0, VertexFormat::Float32x3) // positions
+        .attr(1, VertexFormat::Float32x3); // normals
 
     // Enable depth test
     let depth_test = DepthStencil {
@@ -110,18 +153,21 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
     };
 
     // build the pipeline
-    let pipeline_1 = gfx
+    let basic_lighting_pipeline = gfx
         .create_pipeline()
-        .from(&COLOR_VERTEX_SHADER, &COLOR_FRAGMENT_SHADER)
+        .from(
+            &BASIC_LIGHTING_VERTEX_SHADER,
+            &BASIC_LIGHTING_FRAGMENT_SHADER,
+        )
         .with_vertex_info(&vertex_info)
         .with_depth_stencil(depth_test)
         .build()
         .unwrap();
 
     // build the pipeline
-    let pipeline_2 = gfx
+    let light_cube_pipeline = gfx
         .create_pipeline()
-        .from(&COLOR_VERTEX_SHADER, &LIGHT_CUBE_FRAGMENT_SHADER)
+        .from(&LIGHT_CUBE_VERTEX_SHADER, &LIGHT_CUBE_FRAGMENT_SHADER)
         .with_vertex_info(&vertex_info)
         .with_depth_stencil(depth_test)
         .build()
@@ -130,47 +176,48 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
     // define vertex data
     #[rustfmt::skip]
     let vertices = [
-        -0.5, -0.5, -0.5,
-        0.5, -0.5, -0.5,
-        0.5,  0.5, -0.5,
-        0.5,  0.5, -0.5,
-        -0.5,  0.5, -0.5,
-        -0.5, -0.5, -0.5,
+        // pos              // normals
+        -0.5, -0.5, -0.5,   0.0,  0.0, -1.0,
+        0.5, -0.5, -0.5,    0.0,  0.0, -1.0,
+        0.5,  0.5, -0.5,    0.0,  0.0, -1.0,
+        0.5,  0.5, -0.5,    0.0,  0.0, -1.0,
+        -0.5,  0.5, -0.5,   0.0,  0.0, -1.0,
+        -0.5, -0.5, -0.5,   0.0,  0.0, -1.0,
 
-        -0.5, -0.5,  0.5,
-        0.5, -0.5,  0.5,
-        0.5,  0.5,  0.5,
-        0.5,  0.5,  0.5,
-        -0.5,  0.5,  0.5,
-        -0.5, -0.5,  0.5,
+        -0.5, -0.5,  0.5,   0.0,  0.0,  1.0,
+        0.5, -0.5,  0.5,    0.0,  0.0,  1.0,
+        0.5,  0.5,  0.5,    0.0,  0.0,  1.0,
+        0.5,  0.5,  0.5,    0.0,  0.0,  1.0,
+        -0.5,  0.5,  0.5,   0.0,  0.0,  1.0,
+        -0.5, -0.5,  0.5,   0.0,  0.0,  1.0,
 
-        -0.5,  0.5,  0.5,
-        -0.5,  0.5, -0.5,
-        -0.5, -0.5, -0.5,
-        -0.5, -0.5, -0.5,
-        -0.5, -0.5,  0.5,
-        -0.5,  0.5,  0.5,
+        -0.5,  0.5,  0.5,   -1.0,  0.0,  0.0,
+        -0.5,  0.5, -0.5,   -1.0,  0.0,  0.0,
+        -0.5, -0.5, -0.5,   -1.0,  0.0,  0.0,
+        -0.5, -0.5, -0.5,   -1.0,  0.0,  0.0,
+        -0.5, -0.5,  0.5,   -1.0,  0.0,  0.0,
+        -0.5,  0.5,  0.5,   -1.0,  0.0,  0.0,
 
-        0.5,  0.5,  0.5,
-        0.5,  0.5, -0.5,
-        0.5, -0.5, -0.5,
-        0.5, -0.5, -0.5,
-        0.5, -0.5,  0.5,
-        0.5,  0.5,  0.5,
+        0.5,  0.5,  0.5,    1.0,  0.0,  0.0,
+        0.5,  0.5, -0.5,    1.0,  0.0,  0.0,
+        0.5, -0.5, -0.5,    1.0,  0.0,  0.0,
+        0.5, -0.5, -0.5,    1.0,  0.0,  0.0,
+        0.5, -0.5,  0.5,    1.0,  0.0,  0.0,
+        0.5,  0.5,  0.5,    1.0,  0.0,  0.0,
 
-        -0.5, -0.5, -0.5,
-        0.5, -0.5, -0.5,
-        0.5, -0.5,  0.5,
-        0.5, -0.5,  0.5,
-        -0.5, -0.5,  0.5,
-        -0.5, -0.5, -0.5,
+        -0.5, -0.5, -0.5,   0.0, -1.0,  0.0,
+        0.5, -0.5, -0.5,    0.0, -1.0,  0.0,
+        0.5, -0.5,  0.5,    0.0, -1.0,  0.0,
+        0.5, -0.5,  0.5,    0.0, -1.0,  0.0,
+        -0.5, -0.5,  0.5,   0.0, -1.0,  0.0,
+        -0.5, -0.5, -0.5,   0.0, -1.0,  0.0,
 
-        -0.5,  0.5, -0.5,
-        0.5,  0.5, -0.5,
-        0.5,  0.5,  0.5,
-        0.5,  0.5,  0.5,
-        -0.5,  0.5,  0.5,
-        -0.5,  0.5, -0.5,
+        -0.5,  0.5, -0.5,   0.0,  1.0,  0.0,
+        0.5,  0.5, -0.5,    0.0,  1.0,  0.0,
+        0.5,  0.5,  0.5,    0.0,  1.0,  0.0,
+        0.5,  0.5,  0.5,    0.0,  1.0,  0.0,
+        -0.5,  0.5,  0.5,   0.0,  1.0,  0.0,
+        -0.5,  0.5, -0.5,   0.0,  1.0,  0.0,
     ];
 
     // create the vertex buffer object
@@ -185,8 +232,9 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
     let transform_ubo = gfx.create_uniform_buffer(0, "Transform").build().unwrap();
 
     let light = Light {
-        object_color: vec3(1.0, 0.5, 0.31),
+        light_pos: vec3(1.2, 1.0, 2.0),
         light_color: vec3(1.0, 1.0, 1.0),
+        object_color: vec3(1.0, 0.5, 0.31),
     };
 
     let light_ubo = gfx
@@ -201,8 +249,8 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
     };
 
     State {
-        pipeline_1,
-        pipeline_2,
+        basic_lighting_pipeline,
+        light_cube_pipeline,
         vbo,
         transform_ubo,
         light_ubo,
@@ -281,12 +329,14 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
     let model = Mat4::IDENTITY;
 
     // lighting transform
-    let transform = Transform {
-        model,
-        view,
-        projection,
-    };
-    gfx.set_buffer_data(&state.transform_ubo, &transform);
+    gfx.set_buffer_data(
+        &state.transform_ubo,
+        &Transform {
+            model,
+            view,
+            projection,
+        },
+    );
 
     let mut renderer = gfx.create_renderer();
 
@@ -298,7 +348,7 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
 
     renderer.begin(Some(&clear));
 
-    renderer.set_pipeline(&state.pipeline_1);
+    renderer.set_pipeline(&state.basic_lighting_pipeline);
     renderer.bind_buffers(&[&state.vbo, &state.transform_ubo, &state.light_ubo]);
     renderer.draw(0, 36);
 
@@ -313,15 +363,18 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
     let light_pos = vec3(1.2, 1.0, 2.0);
     let model = Mat4::from_translation(light_pos);
     let model = model * Mat4::from_scale(Vec3::splat(0.2));
-    let transform = Transform {
-        model,
-        view,
-        projection,
-    };
-    gfx.set_buffer_data(&state.transform_ubo, &transform);
+
+    gfx.set_buffer_data(
+        &state.transform_ubo,
+        &Transform {
+            model,
+            view,
+            projection,
+        },
+    );
 
     renderer.begin(None);
-    renderer.set_pipeline(&state.pipeline_2);
+    renderer.set_pipeline(&state.light_cube_pipeline);
     renderer.bind_buffers(&[&state.vbo, &state.transform_ubo]);
     renderer.draw(0, 36);
     renderer.end();
