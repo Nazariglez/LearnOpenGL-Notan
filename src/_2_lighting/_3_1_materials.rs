@@ -178,7 +178,6 @@ struct State {
 
 #[notan_main]
 fn main() -> Result<(), String> {
-    // init notan using setup as initialization callback
     notan::init_with(setup)
         // pass the update function
         .update(update)
@@ -380,10 +379,10 @@ fn draw(app: &mut App, gfx: &mut Graphics, state: &mut State) {
     );
 
     let time = app.timer.time_since_init();
-    let light_color = vec3(time.sin() * 2.0, time.sin() * 0.7, time.sin() * 1.3);
+    let light_color = vec3((time * 2.0).sin(), (time * 0.7).sin(), (time * 1.3).sin());
 
-    let diffuse = light_color * vec3(0.5, 0.5, 0.5);
-    let ambient = diffuse * vec3(0.2, 0.2, 0.2);
+    let diffuse = light_color * 0.5;
+    let ambient = diffuse * 0.2;
 
     let light = Light {
         position: LIGHT_POS,
