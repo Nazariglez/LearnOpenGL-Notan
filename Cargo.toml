@@ -163,3 +163,15 @@ path = "src/_2_lighting/_3_2_materials_exercise1.rs"
 [[bin]]
 name = "2_4_1"
 path = "src/_2_lighting/_4_1_lighting_maps_diffuse.rs"
+
+[[bin]]
+name = "2_4_2"
+path = "src/_2_lighting/_4_2_lighting_maps_specular.rs"
+
+[[bin]]
+name = "2_4_3"
+path = "src/_2_lighting/_4_3_lighting_maps_exercise2.rs"
+
+[[bin]]
+name = "2_4_4"
+path = "src/_2_lighting/_4_4_lighting_maps_exercise4.rs"
