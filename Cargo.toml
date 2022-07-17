@@ -179,3 +179,15 @@ path = "src/_2_lighting/_4_4_lighting_maps_exercise4.rs"
 [[bin]]
 name = "2_5_1"
 path = "src/_2_lighting/_5_1_light_casters_directional.rs"
+
+[[bin]]
+name = "2_5_2"
+path = "src/_2_lighting/_5_2_light_casters_point.rs"
+
+[[bin]]
+name = "2_5_3"
+path = "src/_2_lighting/_5_3_light_casters_spot.rs"
+
+[[bin]]
+name = "2_5_4"
+path = "src/_2_lighting/_5_4_light_casters_spot_soft.rs"
