@@ -88,37 +88,6 @@ const MATERIAL_FRAGMENT_SHADER: ShaderSource = notan::fragment_shader! {
   "#
 };
 
-// language=glsl
-const LIGHT_CUBE_VERTEX_SHADER: ShaderSource = notan::vertex_shader! {
-  r#"
-    #version 450
-    layout (location = 0) in vec3 aPos;
-
-    layout(set = 0, binding = 0) uniform Transform {
-        mat4 model;
-        mat4 view;
-        mat4 projection;
-    };
-
-    void main()
-    {
-        gl_Position = projection * view * model * vec4(aPos, 1.0);
-    }
-  "#
-};
-
-// language=glsl
-const LIGHT_CUBE_FRAGMENT_SHADER: ShaderSource = notan::fragment_shader! {
-    r#"
-        #version 450
-        layout(location = 0) out vec4 color;
-
-        void main() {
-            color = vec4(1.0); // white color
-        }
-    "#
-};
-
 // Represent our transform data
 #[derive(Copy, Clone, Default)]
 #[uniform]
@@ -143,13 +112,7 @@ struct Material {
     shininess: f32,
 }
 
-impl Default for Material {
-    fn default() -> Self {
-        Self { shininess: 32.0 }
-    }
-}
-
-#[derive(Copy, Clone, Default)]
+#[derive(Copy, Clone)]
 #[uniform]
 struct MaterialData {
     view_pos: Vec3,
@@ -174,7 +137,6 @@ const CUBE_POSITIONS: [Vec3; 10] = [
 #[derive(AppState)]
 struct State {
     material_pipeline: Pipeline,
-    light_cube_pipeline: Pipeline,
     vbo: Buffer,
     transform_ubo: Buffer,
     material_ubo: Buffer,
@@ -221,15 +183,6 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
         .with_depth_stencil(depth_test)
         .with_texture_location(0, "diffuse_texture")
         .with_texture_location(1, "specular_texture")
-        .build()
-        .unwrap();
-
-    // build the pipeline
-    let light_cube_pipeline = gfx
-        .create_pipeline()
-        .from(&LIGHT_CUBE_VERTEX_SHADER, &LIGHT_CUBE_FRAGMENT_SHADER)
-        .with_vertex_info(&vertex_info)
-        .with_depth_stencil(depth_test)
         .build()
         .unwrap();
 
@@ -317,7 +270,6 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
 
     State {
         material_pipeline,
-        light_cube_pipeline,
         vbo,
         transform_ubo,
         material_ubo,
@@ -401,7 +353,7 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
         specular: Vec3::splat(1.0),
     };
 
-    let material = Material::default();
+    let material = Material { shininess: 32.0 };
 
     gfx.set_buffer_data(
         &state.material_ubo,
