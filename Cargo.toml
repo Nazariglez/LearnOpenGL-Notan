@@ -191,3 +191,7 @@ path = "src/_2_lighting/_5_3_light_casters_spot.rs"
 [[bin]]
 name = "2_5_4"
 path = "src/_2_lighting/_5_4_light_casters_spot_soft.rs"
+
+[[bin]]
+name = "2_6_1"
+path = "src/_2_lighting/_6_1_multiple_lights.rs"
