@@ -191,6 +191,37 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
   "#
 };
 
+// language=glsl
+const LIGHT_CUBE_VERTEX_SHADER: ShaderSource = notan::vertex_shader! {
+  r#"
+    #version 450
+    layout (location = 0) in vec3 aPos;
+
+    layout(set = 0, binding = 0) uniform Transform {
+        mat4 model;
+        mat4 view;
+        mat4 projection;
+    };
+
+    void main()
+    {
+        gl_Position = projection * view * model * vec4(aPos, 1.0);
+    }
+  "#
+};
+
+// language=glsl
+const LIGHT_CUBE_FRAGMENT_SHADER: ShaderSource = notan::fragment_shader! {
+    r#"
+        #version 450
+        layout(location = 0) out vec4 color;
+
+        void main() {
+            color = vec4(1.0); // white color
+        }
+    "#
+};
+
 // Represent our transform data
 #[derive(Copy, Clone, Default)]
 #[uniform]
@@ -261,7 +292,7 @@ struct SpotLight {
 struct MaterialData {
     view_pos: Vec3,
     dir_light: DirLight,
-    point_lights: Vec<PointLight>,
+    point_lights: [PointLight; 4],
     spot_light: SpotLight,
     material: Material,
 }
@@ -279,8 +310,6 @@ const CUBE_POSITIONS: [Vec3; 10] = [
     vec3(-1.3, 1.0, -1.5),
 ];
 
-const LIGHT_POS: Vec3 = vec3(1.2, 1.0, 2.0);
-
 const POINT_LIGHT_POSITIONS: [Vec3; 4] = [
     vec3(0.7, 0.2, 2.0),
     vec3(2.3, -3.3, -4.0),
@@ -292,6 +321,7 @@ const POINT_LIGHT_POSITIONS: [Vec3; 4] = [
 #[derive(AppState)]
 struct State {
     material_pipeline: Pipeline,
+    light_cube_pipeline: Pipeline,
     vbo: Buffer,
     transform_ubo: Buffer,
     material_ubo: Buffer,
@@ -338,6 +368,15 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
         .with_depth_stencil(depth_test)
         .with_texture_location(0, "diffuse_texture")
         .with_texture_location(1, "specular_texture")
+        .build()
+        .unwrap();
+
+    // build the pipeline
+    let light_cube_pipeline = gfx
+        .create_pipeline()
+        .from(&LIGHT_CUBE_VERTEX_SHADER, &LIGHT_CUBE_FRAGMENT_SHADER)
+        .with_vertex_info(&vertex_info)
+        .with_depth_stencil(depth_test)
         .build()
         .unwrap();
 
@@ -425,6 +464,7 @@ fn setup(app: &mut App, gfx: &mut Graphics) -> State {
 
     State {
         material_pipeline,
+        light_cube_pipeline,
         vbo,
         transform_ubo,
         material_ubo,
@@ -512,7 +552,7 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
     };
 
     // point lights
-    let point_lights = vec![
+    let point_lights = [
         PointLight {
             position: POINT_LIGHT_POSITIONS[0],
             ..Default::default()
@@ -592,6 +632,30 @@ fn draw(gfx: &mut Graphics, state: &mut State) {
         renderer.bind_texture_slot(1, 1, &state.specular_texture);
         renderer.draw(0, 36);
 
+        renderer.end();
+
+        gfx.render(&renderer);
+    });
+
+    // light point
+    POINT_LIGHT_POSITIONS.iter().for_each(|pos| {
+        let mut renderer = gfx.create_renderer();
+        let model = Mat4::from_translation(*pos);
+        let model = model * Mat4::from_scale(Vec3::splat(0.2));
+
+        gfx.set_buffer_data(
+            &state.transform_ubo,
+            &Transform {
+                model,
+                view,
+                projection,
+            },
+        );
+
+        renderer.begin(None);
+        renderer.set_pipeline(&state.light_cube_pipeline);
+        renderer.bind_buffers(&[&state.vbo, &state.transform_ubo]);
+        renderer.draw(0, 36);
         renderer.end();
 
         gfx.render(&renderer);
